@@ -1,0 +1,11 @@
+name: JobsPlugin
+main: me.cherrykit.Main
+version: 1.0
+
+commands:
+   balance:
+     description: Displays your money.
+     usage: /balance   
+   jobs:
+     description: Join/leave or get info about a job.
+     usage: /jobs <join/leave/info> <builder/breaker>
