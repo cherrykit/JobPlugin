@@ -9,6 +9,7 @@ public class SQLData {
 
 	private static Connection conn;
 	
+	//Gets connection to database
 	public static void getConnection() {
 		try {
 			conn = DriverManager.getConnection("jdbc:mysql://localhost/jobs?useSSL=false", "sqluser", "sqluserpw");
@@ -18,6 +19,7 @@ public class SQLData {
 		}
 	}
 	
+	//Gets a players job and amount of blocks placed/broken
 	public static String[] getJob(String pname) {
 		String[] results = new String[2];
 		try {
@@ -40,6 +42,7 @@ public class SQLData {
 		return results;
 	}
 	
+	//Gets a players balance
 	public static String getMoney(String pname) {
 		try {
 			String query = "select amount from money where playername = ?";
@@ -62,6 +65,7 @@ public class SQLData {
 		}
 	}
 	
+	//Sets a players job/updates amount of blocks
 	public static void setJob(String pname, String job, int amount) {
 		//Player does not have a job
 		if (getJob(pname)[0] == "0") {
@@ -76,14 +80,9 @@ public class SQLData {
 			} catch (Exception e) {
 				System.out.println(e);
 			}
-			
+		//Player has a job - update blockamount	
 		} else {
 			try {
-				String query = "update job set jobtype = ? where playername = '" + pname + "'";
-				PreparedStatement ps = conn.prepareStatement(query);
-				ps.setString(1, job);
-				ps.executeUpdate();
-				
 				query = "update job set blockamount = ? where playername = '" + pname + "'";
 				ps = conn.prepareStatement(query);
 				ps.setInt(1, amount);
@@ -95,8 +94,9 @@ public class SQLData {
 		}
 	}
 	
+	//Sets players balance
 	public static void setMoney(String pname, double amount) {
-		//Player in database?
+		//Player not yet in database
 		if (getMoney(pname) == "0") {
 			try {
 				String query = "insert into money (playername, amount) values (?,?)";
@@ -108,6 +108,7 @@ public class SQLData {
 			} catch (Exception e) {
 				System.out.println(e);
 			}
+		//Player already in database
 		} else {
 			try {
 				String query = "update money set amount = ? where playername = ?";
@@ -122,6 +123,7 @@ public class SQLData {
 		}
 	}
 	
+	//Removes a players job
 	public static void removeJob(String pname) {
 		try {
 			String query = "delete from job where playername = ?";
@@ -134,6 +136,7 @@ public class SQLData {
 		}
 	}
 	
+	//Closes connection to database
 	public static void closeConnection() {
 		try {
 			conn.close();
